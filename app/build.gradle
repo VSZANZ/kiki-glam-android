@@ -1,0 +1,44 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'nz.vishal.kikisglamstudio'
+    compileSdk 36
+
+    defaultConfig {
+        applicationId 'nz.vishal.kikisglamstudio'
+        minSdk 24
+        targetSdk 36
+        // Set by the GitHub Actions form each time you build (1, 2, 3 ...)
+        versionCode Integer.parseInt(System.getenv('VERSION_CODE') ?: '1')
+        versionName System.getenv('VERSION_NAME') ?: '1.0.0'
+    }
+
+    signingConfigs {
+        release {
+            // The key itself is never stored in the repository: GitHub Actions
+            // rebuilds upload.jks from your repository secrets during the build.
+            storeFile file(System.getenv('KEYSTORE_PATH') ?: 'upload.jks')
+            storePassword System.getenv('KEYSTORE_PASSWORD')
+            keyAlias System.getenv('KEY_ALIAS') ?: 'upload'
+            keyPassword System.getenv('KEY_PASSWORD') ?: System.getenv('KEYSTORE_PASSWORD')
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.release
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+
+dependencies {
+    implementation 'androidx.webkit:webkit:1.12.1'
+}
